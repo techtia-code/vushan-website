@@ -2,18 +2,18 @@
    VUSHĀN admin.js
 ═══════════════════════════ */
 
-/* ── LOGIN ── */
+/* ── LOGIN (your original logic, credentials updated) ── */
 const form = document.getElementById("loginForm");
 if (form) {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
-    const username = document.getElementById("username").value.trim().toLowerCase();
+    const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    if (username === "wellingtonadmin@admin.com" && password === "2026WEBINDEX123...") {
+    if (username === "vushan_admin" && password === "Vushan@2026") {
       localStorage.setItem("isAdmin", "true");
       window.location.href = "dashboard.html";
     } else {
-      alert("Invalid email or password.");
+      alert("Invalid username or password.");
     }
   });
 }
@@ -56,12 +56,12 @@ function saveData(data) {
    SECTION SWITCH
 ════════════════════════ */
 const TITLES = {
-  "overview":      ["Dashboard", "Overview of your store"],
-  "casual-men":    ["Casual Men", "Manage casual menswear"],
-  "casual-women":  ["Casual Women", "Manage casual womenswear"],
-  "formal-men":    ["Formal Men", "Manage formal menswear"],
-  "formal-women":  ["Formal Women", "Manage formal womenswear"],
-  "discounts":     ["Discounts", "Apply or remove discounts from products"]
+  "overview":       ["Dashboard", "Overview of your store"],
+  "casual-men":     ["Casual Men", "Manage casual menswear"],
+  "casual-women":   ["Casual Women", "Manage casual womenswear"],
+  "formal-men":     ["Formal Men", "Manage formal menswear"],
+  "formal-women":   ["Formal Women", "Manage formal womenswear"],
+  "discounts":      ["Discounts", "Apply or remove discounts from products"]
 };
 
 function showSection(id, linkEl) {
@@ -88,29 +88,11 @@ function showSection(id, linkEl) {
 }
 
 /* ════════════════════════
-   IMAGE UPLOAD HANDLER
-════════════════════════ */
-function handleImageUpload(id, input) {
-  const file = input.files[0];
-  if (!file) return;
-
-  const nameEl = document.getElementById("imgFileName-" + id);
-  if (nameEl) nameEl.textContent = file.name;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const base64 = e.target.result;
-    const hiddenEl = document.getElementById("pImgData-" + id);
-    if (hiddenEl) hiddenEl.value = base64;
-    const prev = document.getElementById("imgPrev-" + id);
-    if (prev) { prev.src = base64; prev.style.display = "block"; }
-  };
-  reader.readAsDataURL(file);
-}
-
-/* ════════════════════════
    INVENTORY SECTION
 ════════════════════════ */
+let editingIdx = null;
+let editingCat = null;
+
 function buildInventorySection(cat) {
   const id  = CAT_IDS[cat];
   const sec = document.getElementById("sec-" + id);
@@ -151,31 +133,11 @@ function buildInventorySection(cat) {
           <label class="field-label">Discount % <span style="font-style:italic;font-size:10px;text-transform:none;letter-spacing:0;">(leave blank for none)</span></label>
           <input type="number" id="pDiscount-${id}" placeholder="e.g. 20" min="0" max="90" />
         </div>
-
         <div class="full">
-          <label class="field-label">Product Image *</label>
-          <div
-            style="border:2px dashed var(--gray-mid);padding:32px;text-align:center;cursor:pointer;transition:border-color .2s;background:var(--cream);"
-            onclick="document.getElementById('pImgFile-${id}').click()"
-            ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
-            ondragleave="this.style.borderColor='var(--gray-mid)'"
-            ondrop="event.preventDefault();this.style.borderColor='var(--gray-mid)';document.getElementById('pImgFile-${id}').files=event.dataTransfer.files;handleImageUpload('${id}',document.getElementById('pImgFile-${id}'))"
-          >
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.3" style="margin-bottom:12px;">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-            <p style="font-size:13px;color:var(--text-muted);margin-bottom:5px;">Click to upload or drag &amp; drop your image</p>
-            <p style="font-size:11px;color:var(--gray-mid);">JPG, PNG, WEBP — recommended 600×800px</p>
-            <p id="imgFileName-${id}" style="font-size:12px;color:var(--gold);margin-top:10px;font-weight:500;"></p>
-            <input type="file" id="pImgFile-${id}" accept="image/*" style="display:none;" onchange="handleImageUpload('${id}',this)" />
-          </div>
-          <input type="hidden" id="pImgData-${id}" value="" />
-          <img id="imgPrev-${id}" src="" alt="Preview"
-            style="width:100px;height:130px;object-fit:cover;border:1px solid var(--gray-mid);margin-top:12px;display:none;" />
+          <label class="field-label">Image URL *</label>
+          <input type="url" id="pImg-${id}" placeholder="https://images.unsplash.com/…" oninput="previewImg('${id}', this.value)" />
+          <img class="img-preview" id="imgPrev-${id}" src="" alt="Preview" />
         </div>
-
         <div class="full">
           <label class="field-label">Tags <span style="font-style:italic;font-size:10px;text-transform:none;letter-spacing:0;">(comma separated — used in search)</span></label>
           <input type="text" id="pTags-${id}" placeholder="shirt, formal, men, slim" />
@@ -222,12 +184,9 @@ function productRow(p, i, cat, id) {
   const discPrice = p.discount > 0
     ? `<br><span style="color:var(--gold-dark);font-size:11px;">IDR ${Math.round(p.price*(1-p.discount/100)).toLocaleString()}</span>`
     : "";
-  const thumb = p.img
-    ? `<img src="${p.img}" alt="${p.name}" style="width:44px;height:54px;object-fit:cover;display:block;" />`
-    : `<div style="width:44px;height:54px;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text-muted);text-align:center;">No<br>Image</div>`;
   return `
     <tr>
-      <td>${thumb}</td>
+      <td><img class="prod-thumb" src="${p.img}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=60'" /></td>
       <td><div class="prod-name">${p.name}</div></td>
       <td><div class="prod-cat">${p.subcat || "—"}</div></td>
       <td>IDR ${p.price.toLocaleString()}${discPrice}</td>
@@ -240,19 +199,20 @@ function productRow(p, i, cat, id) {
   `;
 }
 
+function previewImg(id, url) {
+  const el = document.getElementById("imgPrev-" + id);
+  if (!el) return;
+  if (url) { el.src = url; el.style.display = "block"; }
+  else { el.style.display = "none"; }
+}
+
 function clearForm(id) {
-  ["pName","pSubcat","pPrice","pDiscount","pTags","pEditIdx"].forEach(f => {
+  ["pName","pSubcat","pPrice","pDiscount","pImg","pTags","pEditIdx"].forEach(f => {
     const el = document.getElementById(f + "-" + id);
     if (el) el.value = "";
   });
-  const imgData = document.getElementById("pImgData-" + id);
-  if (imgData) imgData.value = "";
-  const imgFile = document.getElementById("pImgFile-" + id);
-  if (imgFile) imgFile.value = "";
-  const fileName = document.getElementById("imgFileName-" + id);
-  if (fileName) fileName.textContent = "";
   const prev = document.getElementById("imgPrev-" + id);
-  if (prev) { prev.src = ""; prev.style.display = "none"; }
+  if (prev) prev.style.display = "none";
   const title = document.getElementById("formTitle-" + id);
   const cat = Object.keys(CAT_IDS).find(k => CAT_IDS[k] === id);
   if (title && cat) title.textContent = "Add Product — " + cat;
@@ -261,23 +221,15 @@ function clearForm(id) {
 function saveProduct(cat, id) {
   const name     = (document.getElementById("pName-"+id)?.value || "").trim();
   const price    = parseInt(document.getElementById("pPrice-"+id)?.value || "0");
-  const imgData  = (document.getElementById("pImgData-"+id)?.value || "").trim();
+  const img      = (document.getElementById("pImg-"+id)?.value || "").trim();
   const subcat   = document.getElementById("pSubcat-"+id)?.value || "";
   const discount = parseInt(document.getElementById("pDiscount-"+id)?.value || "0") || 0;
   const tags     = (document.getElementById("pTags-"+id)?.value || "").split(",").map(t => t.trim()).filter(Boolean);
   const editIdx  = document.getElementById("pEditIdx-"+id)?.value;
 
-  if (!name || !price) { showAdminToast("Please fill in Name and Price"); return; }
+  if (!name || !price || !img) { showAdminToast("Please fill in Name, Price and Image URL"); return; }
 
-  /* on edit keep old image if no new one uploaded */
-  let finalImg = imgData;
-  if (!finalImg && editIdx !== "") {
-    const existing = getData()[cat][parseInt(editIdx)];
-    if (existing) finalImg = existing.img;
-  }
-  if (!finalImg) { showAdminToast("Please upload a product image"); return; }
-
-  const product = { name, subcat, price, discount, tags, img: finalImg };
+  const product = { name, subcat, price, discount, tags, img };
   const data = getData();
   if (!data[cat]) data[cat] = [];
 
@@ -303,16 +255,10 @@ function editProduct(cat, id, idx) {
   document.getElementById("pSubcat-"+id).value   = p.subcat || "";
   document.getElementById("pPrice-"+id).value    = p.price;
   document.getElementById("pDiscount-"+id).value = p.discount || "";
+  document.getElementById("pImg-"+id).value      = p.img;
   document.getElementById("pTags-"+id).value     = (p.tags || []).join(", ");
   document.getElementById("pEditIdx-"+id).value  = idx;
-
-  if (p.img) {
-    const prev = document.getElementById("imgPrev-"+id);
-    if (prev) { prev.src = p.img; prev.style.display = "block"; }
-    const nameEl = document.getElementById("imgFileName-"+id);
-    if (nameEl) nameEl.textContent = "✦ Current image loaded — upload a new one to replace it";
-  }
-
+  previewImg(id, p.img);
   const title = document.getElementById("formTitle-"+id);
   if (title) title.textContent = "Edit Product — " + cat;
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -341,12 +287,9 @@ function buildDiscountTable() {
       const discLabel = p.discount > 0
         ? `<span class="badge-discount">${p.discount}% OFF</span>`
         : `<span style="color:var(--gray-mid);font-size:12px;">None</span>`;
-      const thumb = p.img
-        ? `<img src="${p.img}" alt="${p.name}" style="width:44px;height:54px;object-fit:cover;display:block;" />`
-        : `<div style="width:44px;height:54px;background:var(--gray-light);"></div>`;
       rows += `
         <tr>
-          <td>${thumb}</td>
+          <td><img class="prod-thumb" src="${p.img}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=60'"/></td>
           <td><div class="prod-name">${p.name}</div></td>
           <td><div class="prod-cat">${cat}</div></td>
           <td>IDR ${p.price.toLocaleString()}</td>
@@ -413,3 +356,51 @@ function showAdminToast(msg) {
 document.addEventListener("DOMContentLoaded", function() {
   if (document.getElementById("sec-overview")) updateStats();
 });
+
+/* ── your original functions kept below ── */
+function sendMessage() {
+  const msg = document.getElementById("msg") ? document.getElementById("msg").value : "";
+  let messages = JSON.parse(localStorage.getItem("messages")) || [];
+  messages.push(msg);
+  localStorage.setItem("messages", JSON.stringify(messages));
+  alert("Message sent");
+}
+
+function addProduct() {
+  const name  = document.getElementById("name") ? document.getElementById("name").value : "";
+  const price = document.getElementById("price") ? document.getElementById("price").value : "";
+  const image = document.getElementById("image") ? document.getElementById("image").files[0] : null;
+  const reader = new FileReader();
+  reader.onload = function() {
+    const product = { name, price, image: reader.result };
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    products.push(product);
+    localStorage.setItem("products", JSON.stringify(products));
+    alert("Product Added!");
+    loadProducts();
+  };
+  if (image) reader.readAsDataURL(image);
+}
+
+function loadProducts() {
+  const container = document.getElementById("products");
+  if (!container) return;
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+  container.innerHTML = products.map((p, i) => `
+    <div>
+      <img src="${p.image}" width="100"/>
+      <h3>${p.name}</h3>
+      <p>$${p.price}</p>
+      <button onclick="deleteOldProduct(${i})">Delete</button>
+    </div>
+  `).join("");
+}
+
+function deleteOldProduct(index) {
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  products.splice(index, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+}
+
+loadProducts();
