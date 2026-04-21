@@ -1,0 +1,807 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VUSHĀN</title>
+<link rel="stylesheet" href="../webcss/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!--Announcement-->
+<div class="announcement">
+  <span>NEW ARRIVALS</span> - Discover our latest collection
+</div>
+
+<!--Navbar-->
+<nav>
+  <a href="#" class="logo">VUSH<span>Ā</span>N</a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#women">Women</a></li>
+    <li><a href="#men">Men</a></li>
+    <li><a href="#formal">Formal</a></li>
+    <li><a href="#casual">Casual</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-icons">
+    <button title="Search" onclick="openSearch()" class="icon-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10.5" cy="10.5" r="7"/>
+        <line x1="16" y1="16" x2="22" y2="22"/>
+      </svg>
+    </button>
+    <button title="Account" onclick="openAuth('login')" class="icon-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21a8 8 0 1 0-16 0"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </button>
+    <button title="Wishlist" class="icon-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+      </svg>
+    </button>
+    <button title="Cart" onclick="openCart()" class="icon-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.6a2 2 0 0 0 2-1.6L23 6H6"/>
+      </svg>
+      <span id="cart-count" style="font-size:11px;color:var(--gold);">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay" onclick="closeSearch()"></div>
+<div class="search-panel" id="searchPanel">
+  <div class="search-panel-inner">
+    <div class="search-input-wrap">
+      <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10.5" cy="10.5" r="7"/>
+        <line x1="16" y1="16" x2="22" y2="22"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search for tops, jackets, skirts…" oninput="handleSearch(this.value)" onkeydown="handleSearchKey(event)" autocomplete="off" />
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">&#10005;</button>
+      <button class="search-close-btn" onclick="closeSearch()">&#10005; Close</button>
+    </div>
+
+    <div class="search-categories" id="searchCategories">
+      <p class="search-label">Browse by Category</p>
+      <div class="search-cat-grid">
+        <button class="search-cat-btn" onclick="filterCategory('Tops')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+          Tops
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Shirts')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/><line x1="12" y1="2" x2="12" y2="8"/></svg>
+          Shirts
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Ties')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2 7-2 3-2-3 2-7z"/><path d="M10 9l-3 13h10L14 9"/></svg>
+          Ties
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Cardigans')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-4"/><path d="M9 3a3 3 0 006 0"/></svg>
+          Cardigans
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Jackets')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3l3 3 3-3M3 9v12a2 2 0 002 2h14a2 2 0 002-2V9M3 9h18"/></svg>
+          Jackets
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Blazers')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3l3 3 3-3M3 9v12a2 2 0 002 2h14a2 2 0 002-2V9M3 9h18"/><line x1="12" y1="6" x2="12" y2="20"/></svg>
+          Blazers
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Trench Coats')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2C9.79 2 8 3.79 8 6v2H5l1 14h12l1-14h-3V6c0-2.21-1.79-4-4-4z"/><line x1="8" y1="10" x2="16" y2="10"/></svg>
+          Trench Coats
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Women Skirt Suits')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 7H9l3-7z"/><path d="M9 9l-4 13h14L15 9"/></svg>
+          Women Skirt Suits
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Dresses')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2C9.79 2 8 3.79 8 6v2H5l1 14h12l1-14h-3V6c0-2.21-1.79-4-4-4z"/></svg>
+          Dresses
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Trousers')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v3l-4 13H8L4 7V4z"/><line x1="12" y1="7" x2="12" y2="20"/></svg>
+          Trousers
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Skirts')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 4h12l2 16H4L6 4z"/><line x1="6" y1="4" x2="18" y2="4"/></svg>
+          Skirts
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Formal Wear')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+          Formal Wear
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Casual Wear')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          Casual Wear
+        </button>
+        <button class="search-cat-btn" onclick="filterCategory('Accessories')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          Accessories
+        </button>
+      </div>
+    </div>
+
+    <div class="search-results" id="searchResults" style="display:none;">
+      <p class="search-label" id="searchResultLabel">Results</p>
+      <!-- ── Search results show product cards only — click card to view product ── -->
+      <div class="search-results-grid" id="searchResultsGrid"></div>
+      <div class="no-results" id="noResults" style="display:none;">
+        <p>No results found for "<span id="noResultsTerm"></span>"</p>
+        <p class="no-results-sub">Try searching for tops, jackets, dresses, ties…</p>
+      </div>
+    </div>
+
+    <div class="search-trending" id="searchTrending">
+      <p class="search-label">Trending Now</p>
+      <div class="trending-tags">
+        <span onclick="doSearch('Blazer')">Blazer</span>
+        <span onclick="doSearch('Midi Dress')">Midi Dress</span>
+        <span onclick="doSearch('Trench Coat')">Trench Coat</span>
+        <span onclick="doSearch('Cardigan')">Cardigan</span>
+        <span onclick="doSearch('Formal Suit')">Formal Suit</span>
+        <span onclick="doSearch('Skirt')">Skirt</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Hero-->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Made in Premium — Dedicated to Elegance</p>
+    <h1 class="hero-title">Discover the<br><em>Art of</em><br>Dressing Up</h1>
+    <a href="#women" class="hero-cta">Shop Collection &rarr;</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-product" onclick="addToCart('Tailored Blazer Coat', 300000)">
+      <img class="hero-product-img" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=200&q=80" alt="Tailored Blazer" />
+      <div class="hero-product-info">
+        <h4>Tailored Blazer Coat</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+        <a class="shop-btn">Shop Now</a>
+      </div>
+    </div>
+    <div class="hero-product" onclick="addToCart('Slip Midi Dress', 300000)">
+      <img class="hero-product-img" src="https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=200&q=80" alt="Slip Dress" />
+      <div class="hero-product-info">
+        <h4>Slip Midi Dress</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+        <a class="shop-btn">Shop Now</a>
+      </div>
+    </div>
+    <div class="hero-product" onclick="addToCart('Structured Long Coat', 300000)">
+      <img class="hero-product-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&q=80" alt="Coat" />
+      <div class="hero-product-info">
+        <h4>Structured Long Coat</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+        <a class="shop-btn">Shop Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="cat-item">
+    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt="Formal Woman" />
+    <div class="cat-overlay"></div>
+    <div class="cat-label">Formal Woman</div>
+  </div>
+  <div class="cat-item">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Casual Style" />
+    <div class="cat-overlay"></div>
+    <div class="cat-label">Casual Style</div>
+  </div>
+  <div class="cat-item">
+    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Formal Men" />
+    <div class="cat-overlay"></div>
+    <div class="cat-label">Formal Men</div>
+  </div>
+  <div class="cat-item">
+    <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?w=600&q=80" alt="Street Wear" />
+    <div class="cat-overlay"></div>
+    <div class="cat-label">Street Wear</div>
+  </div>
+</section>
+
+<!-- BEST OUTFIT SECTION -->
+<section class="outfit-section" id="women">
+  <div class="section-header">
+    <p class="section-tag">Curated Collection</p>
+    <h2 class="section-title">Best Outfit for<br>Your <em>Happiness</em></h2>
+    <p class="section-subtitle">Each piece is crafted with precision, blending timeless silhouettes with modern sensibility.</p>
+  </div>
+  <div class="outfit-grid">
+    <div class="outfit-card" onclick="addToCart('Classic Monochrome Suit', 300000)">
+      <img class="outfit-card-img" src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500&q=80" alt="Suit" />
+      <div class="outfit-card-overlay"></div>
+      <button class="add-to-bag">Add to Bag</button>
+      <div class="outfit-card-info">
+        <h4>Classic Monochrome Suit</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+      </div>
+    </div>
+    <div class="outfit-card" onclick="addToCart('Oversized Trench Coat', 300000)">
+      <img class="outfit-card-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80" alt="Trench" />
+      <div class="outfit-card-overlay"></div>
+      <button class="add-to-bag">Add to Bag</button>
+      <div class="outfit-card-info">
+        <h4>Oversized Trench Coat</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+      </div>
+    </div>
+    <div class="outfit-card" onclick="addToCart('Golden Hour Dress', 300000)">
+      <img class="outfit-card-img" src="https://images.unsplash.com/photo-1496217590455-aa63a8550c23?w=500&q=80" alt="Dress" />
+      <div class="outfit-card-overlay"></div>
+      <button class="add-to-bag">Add to Bag</button>
+      <div class="outfit-card-info">
+        <h4>Golden Hour Dress</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+      </div>
+    </div>
+    <div class="outfit-card" onclick="addToCart('Plaid Flannel Jacket', 300000)">
+      <img class="outfit-card-img" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80" alt="Jacket" />
+      <div class="outfit-card-overlay"></div>
+      <button class="add-to-bag">Add to Bag</button>
+      <div class="outfit-card-info">
+        <h4>Plaid Flannel Jacket</h4>
+        <div class="price">IDR <strong>300,000</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="see-more-wrap">
+    <a href="#" class="btn-outline btn-gold">See More &rarr;</a>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust-strip">
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+    <h3>100% Satisfaction Guaranteed</h3>
+    <p>We stand behind every piece. If you're not completely satisfied, we'll make it right — no questions asked.</p>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 15v-3a8 8 0 0 1 16 0v3"/>
+        <rect x="2" y="15" width="4" height="6" rx="1"/>
+        <rect x="18" y="15" width="4" height="6" rx="1"/>
+      </svg>
+    </div>
+    <h3>24/7 Online Service</h3>
+    <p>Our dedicated style consultants are available around the clock to assist with sizing, orders, and styling advice.</p>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="10" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <h3>Payment with Secure System</h3>
+    <p>Shop with confidence with end of month payment plans. All transactions are encrypted with industry-leading security protocols.</p>
+  </div>
+</section>
+
+<!-- VIDEO BANNER -->
+<section class="video-banner" id="about">
+  <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=80" alt="Fashion film" />
+  <div class="video-banner-overlay">
+    <div class="play-btn">&#9654;</div>
+    <div class="video-caption">Style is a form of<br><em>self-expression</em></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header" style="padding-bottom:0;">
+    <p class="section-tag">What Our Clients Say</p>
+    <h2 class="section-title" style="color:var(--white);">Loved by <em>Thousands</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"The quality of the tailoring is unlike anything I've found in this price range. The blazer fits perfectly and gets compliments every time I wear it."</p>
+      <div class="testi-author">Cynthia Caroline</div>
+      <div class="testi-date">12 Jul 2024</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"I ordered the Midi Dress and it arrived beautifully packaged. The fabric is luxurious and the fit is exactly as described. Will definitely order again."</p>
+      <div class="testi-author">Cynthia Caroline</div>
+      <div class="testi-date">12 Jul 2024</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★☆</div>
+      <p class="testi-text">"Fast shipping, beautiful packaging, and the pieces are even more stunning in person. VUSHĀN has become my go-to for special occasion dressing."</p>
+      <div class="testi-author">Cynthia Caroline</div>
+      <div class="testi-date">12 Jul 2024</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"The customer service team helped me find the perfect outfit for a gala. They clearly know fashion — the recommendation was spot on."</p>
+      <div class="testi-author">Cynthia Caroline</div>
+      <div class="testi-date">12 Jul 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- WOMEN BEST DRESS SECTION -->
+<section class="women-section" id="men">
+  <div class="section-header">
+    <p class="section-tag">For Her</p>
+    <h2 class="section-title">The Best Dress for<br>the Best <em>Woman</em></h2>
+  </div>
+  <div class="women-grid">
+    <div class="product-card" onclick="addToCart('Chiffon Wrap Dress', 300000)">
+      <div class="product-card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&q=80" alt="Wrap Dress" />
+        <span class="product-card-badge">New</span>
+      </div>
+      <div class="category">Long Dress</div>
+      <h4>Chiffon Wrap Dress</h4>
+      <div class="price"><strong>IDR 300,000</strong> <del>IDR 420,000</del></div>
+    </div>
+    <div class="product-card" onclick="addToCart('Bodycon Mini Dress', 300000)">
+      <div class="product-card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?w=500&q=80" alt="Mini Dress" />
+      </div>
+      <div class="category">Mini Dress</div>
+      <h4>Bodycon Mini Dress</h4>
+      <div class="price"><strong>IDR 300,000</strong></div>
+    </div>
+    <div class="product-card" onclick="addToCart('Velvet Evening Gown', 300000)">
+      <div class="product-card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1566479179817-e7df2e3b1ecb?w=500&q=80" alt="Evening Gown" />
+        <span class="product-card-badge">Sale</span>
+      </div>
+      <div class="category">Evening</div>
+      <h4>Velvet Evening Gown</h4>
+      <div class="price"><strong>IDR 300,000</strong> <del>IDR 480,000</del></div>
+    </div>
+    <div class="product-card" onclick="addToCart('Floral Midi Skirt Set', 300000)">
+      <div class="product-card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500&q=80" alt="Skirt Set" />
+      </div>
+      <div class="category">Co-ord Set</div>
+      <h4>Floral Midi Skirt Set</h4>
+      <div class="price"><strong>IDR 300,000</strong></div>
+    </div>
+  </div>
+  <div class="see-more-wrap">
+    <a href="#" class="btn-outline">See More &rarr;</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">VUSH<span style="color:var(--gold)">Ā</span>N</a>
+      <p>Crafting elevated everyday wear and occasion dressing for those who believe clothing is a form of art. Made with care, worn with confidence.</p>
+      <p>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.8.3 1.5.6 2.2a2 2 0 0 1-.5 2.1L8 9a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.5c.7.3 1.4.5 2.2.6a2 2 0 0 1 1.7 2z"/>
+        </svg>
+        <span>+1 (800) 888 000</span>
+      </p>
+      <p>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;">
+          <path d="M4 4h16v16H4z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span>hello@vushan.com</span>
+      </p>
+      <p>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Kingston, Jamaica</span>
+      </p>
+    </div>
+    <div class="footer-col">
+      <h5>Menu</h5>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Partners Hall</a></li>
+        <li><a href="#">Formal Wear</a></li>
+        <li><a href="#">Casual Wear</a></li>
+        <li><a href="#">Latest Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Get Help</h5>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns &amp; Refunds</a></li>
+        <li><a href="#">Payment Options</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Account</h5>
+      <ul>
+        <li><a href="#" onclick="openAuth('login')">My Account</a></li>
+        <li><a href="#" onclick="openAuth('register')">Register</a></li>
+        <li><a href="#">Order History</a></li>
+        <li><a href="#">Wishlist</a></li>
+        <li><a href="#">Rewards &amp; Benefits</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 VUSHĀN — All rights reserved</span>
+    <span>Powered by TECHTIA ENT.</span>
+  </div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authOverlay" onclick="closeAuth()"></div>
+<div class="auth-modal" id="authModal">
+  <button class="auth-close" onclick="closeAuth()">&times;</button>
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+    <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+  </div>
+  <div class="auth-form" id="form-login">
+    <div class="auth-brand">VUSH<span>Ā</span>N</div>
+    <p class="auth-sub">Welcome back. Sign in to your account.</p>
+    <div class="auth-field">
+      <label>Email Address</label>
+      <input type="email" id="login-email" placeholder="hello@example.com" />
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" />
+      <span class="auth-toggle" onclick="togglePass('login-password', this)">Show</span>
+    </div>
+    <div class="auth-row">
+      <label class="auth-check"><input type="checkbox" /> Remember me</label>
+      <a href="#" class="auth-link">Forgot password?</a>
+    </div>
+    <button class="auth-btn" onclick="handleLogin()">Sign In</button>
+    <p class="auth-switch">Don't have an account? <a onclick="switchTab('register')">Register here</a></p>
+  </div>
+  <div class="auth-form" id="form-register" style="display:none;">
+    <div class="auth-brand">VUSH<span>Ā</span>N</div>
+    <p class="auth-sub">Create your account and join the family.</p>
+    <div class="auth-field-row">
+      <div class="auth-field">
+        <label>First Name</label>
+        <input type="text" id="reg-firstname" placeholder="Jane" />
+      </div>
+      <div class="auth-field">
+        <label>Last Name</label>
+        <input type="text" id="reg-lastname" placeholder="Doe" />
+      </div>
+    </div>
+    <div class="auth-field">
+      <label>Email Address</label>
+      <input type="email" id="reg-email" placeholder="hello@example.com" />
+    </div>
+    <div class="auth-field">
+      <label>Phone Number</label>
+      <div class="phone-wrap">
+        <select class="phone-code">
+          <option>🇯🇲 +1876</option>
+          <option>🇺🇸 +1</option>
+          <option>🇬🇧 +44</option>
+          <option>🇨🇦 +1</option>
+          <option>🇹🇹 +1868</option>
+          <option>🇧🇧 +1246</option>
+        </select>
+        <input type="tel" id="reg-phone" placeholder="876 000 0000" />
+      </div>
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input type="password" id="reg-password" placeholder="Min. 8 characters" />
+      <span class="auth-toggle" onclick="togglePass('reg-password', this)">Show</span>
+      <div class="password-strength" id="pwd-strength"></div>
+    </div>
+    <div class="auth-field">
+      <label>Confirm Password</label>
+      <input type="password" id="reg-confirm" placeholder="Re-enter password" />
+      <span class="auth-toggle" onclick="togglePass('reg-confirm', this)">Show</span>
+    </div>
+    <label class="auth-check terms">
+      <input type="checkbox" id="reg-terms" />
+      I agree to the <a href="#" class="auth-link">Terms &amp; Conditions</a> and <a href="#" class="auth-link">Privacy Policy</a>
+    </label>
+    <button class="auth-btn" onclick="handleRegister()">Create Account</button>
+    <p class="auth-switch">Already have an account? <a onclick="switchTab('login')">Sign in</a></p>
+  </div>
+  <div class="auth-success" id="auth-success" style="display:none;">
+    <div class="success-icon">✦</div>
+    <h3>Welcome to VUSHĀN</h3>
+    <p id="success-msg">You have successfully signed in.</p>
+    <button class="auth-btn" onclick="closeAuth()">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Your Bag</h3>
+    <button class="close-btn" onclick="closeCart()">&times;</button>
+  </div>
+  <div id="cart-items-wrap">
+    <div class="cart-empty" id="cart-empty-msg">Your bag is empty.<br>Add something beautiful ✦</div>
+  </div>
+  <div id="cart-footer" style="display:none;">
+    <div class="cart-total"><span>Total</span><span id="cart-total-price">IDR 0</span></div>
+    <br>
+    <button class="checkout-btn" onclick="handleCheckout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── ADMIN CREDENTIALS ── */
+  const ADMIN_EMAIL = "wellingtonadmin@admin.com";
+  const ADMIN_PASSWORD = "2026WEBINDEX123..";
+
+  /* ── PRODUCT DATABASE ── */
+  const products = [
+    { name: 'Tailored Blazer Coat', category: 'Blazers', price: 300000, tags: ['blazer','jacket','formal','coat'], img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=300&q=80' },
+    { name: 'Slip Midi Dress', category: 'Dresses', price: 300000, tags: ['dress','midi','slip','women'], img: 'https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=300&q=80' },
+    { name: 'Structured Long Coat', category: 'Trench Coats', price: 300000, tags: ['coat','trench','long','formal'], img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80' },
+    { name: 'Classic Monochrome Suit', category: 'Formal Wear', price: 300000, tags: ['suit','formal','men','blazer'], img: 'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=300&q=80' },
+    { name: 'Oversized Trench Coat', category: 'Trench Coats', price: 300000, tags: ['trench','coat','oversized','casual'], img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80' },
+    { name: 'Golden Hour Dress', category: 'Dresses', price: 300000, tags: ['dress','women','evening','formal'], img: 'https://images.unsplash.com/photo-1496217590455-aa63a8550c23?w=300&q=80' },
+    { name: 'Plaid Flannel Jacket', category: 'Jackets', price: 300000, tags: ['jacket','plaid','casual','flannel'], img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80' },
+    { name: 'Chiffon Wrap Dress', category: 'Dresses', price: 300000, tags: ['dress','wrap','chiffon','women'], img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&q=80' },
+    { name: 'Bodycon Mini Dress', category: 'Dresses', price: 300000, tags: ['dress','mini','bodycon','women'], img: 'https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?w=300&q=80' },
+    { name: 'Velvet Evening Gown', category: 'Dresses', price: 300000, tags: ['gown','evening','velvet','formal','women'], img: 'https://images.unsplash.com/photo-1566479179817-e7df2e3b1ecb?w=300&q=80' },
+    { name: 'Floral Midi Skirt Set', category: 'Women Skirt Suits', price: 300000, tags: ['skirt','set','floral','women','midi'], img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&q=80' },
+    { name: 'Wool Knit Cardigan', category: 'Cardigans', price: 280000, tags: ['cardigan','knit','wool','casual','top'], img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&q=80' },
+    { name: 'Oxford Button Shirt', category: 'Shirts', price: 250000, tags: ['shirt','oxford','button','formal','men'], img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&q=80' },
+    { name: 'Silk Blouse Top', category: 'Tops', price: 220000, tags: ['top','blouse','silk','women','casual'], img: 'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=300&q=80' },
+    { name: 'Slim Fit Trousers', category: 'Trousers', price: 260000, tags: ['trousers','pants','slim','formal','men'], img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&q=80' },
+    { name: 'A-Line Midi Skirt', category: 'Skirts', price: 230000, tags: ['skirt','midi','aline','women','casual'], img: 'https://images.unsplash.com/photo-1583496661160-fb5218ab2154?w=300&q=80' },
+    { name: 'Silk Pocket Tie', category: 'Ties', price: 120000, tags: ['tie','silk','formal','men','accessories'], img: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=300&q=80' },
+    { name: 'Women Skirt Suit Set', category: 'Women Skirt Suits', price: 420000, tags: ['skirt suit','women','formal','blazer','skirt'], img: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4c3d?w=300&q=80' },
+  ];
+
+  /* ── SEARCH ── */
+  function openSearch() {
+    document.getElementById('searchOverlay').classList.add('open');
+    document.getElementById('searchPanel').classList.add('open');
+    setTimeout(() => document.getElementById('searchInput').focus(), 300);
+  }
+  function closeSearch() {
+    document.getElementById('searchOverlay').classList.remove('open');
+    document.getElementById('searchPanel').classList.remove('open');
+  }
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchClear').style.display = 'none';
+    document.getElementById('searchResults').style.display = 'none';
+    document.getElementById('searchCategories').style.display = 'block';
+    document.getElementById('searchTrending').style.display = 'block';
+  }
+  function handleSearchKey(e) { if (e.key === 'Escape') closeSearch(); }
+  function handleSearch(val) {
+    document.getElementById('searchClear').style.display = val ? 'block' : 'none';
+    if (val.length < 1) {
+      document.getElementById('searchResults').style.display = 'none';
+      document.getElementById('searchCategories').style.display = 'block';
+      document.getElementById('searchTrending').style.display = 'block';
+      return;
+    }
+    doSearch(val);
+  }
+  function doSearch(term) {
+    document.getElementById('searchInput').value = term;
+    document.getElementById('searchClear').style.display = 'block';
+    document.getElementById('searchCategories').style.display = 'none';
+    document.getElementById('searchTrending').style.display = 'none';
+    document.getElementById('searchResults').style.display = 'block';
+    const q = term.toLowerCase();
+    const results = products.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.tags.some(t => t.includes(q))
+    );
+    const label = document.getElementById('searchResultLabel');
+    const grid = document.getElementById('searchResultsGrid');
+    const noRes = document.getElementById('noResults');
+    label.textContent = results.length + ' result' + (results.length !== 1 ? 's' : '') + ' for "' + term + '"';
+    if (results.length === 0) {
+      grid.innerHTML = '';
+      document.getElementById('noResultsTerm').textContent = term;
+      noRes.style.display = 'block';
+    } else {
+      noRes.style.display = 'none';
+      /* ── No add-to-cart in search — clicking card closes search and scrolls to section ── */
+      grid.innerHTML = results.map(p => `
+        <div class="search-result-card" onclick="closeSearch()">
+          <img src="${p.img}" alt="${p.name}" />
+          <div class="search-result-info">
+            <span class="search-result-cat">${p.category}</span>
+            <h4>${p.name}</h4>
+            <span class="search-result-price">IDR ${p.price.toLocaleString()}</span>
+          </div>
+          <span style="font-size:10px;letter-spacing:1px;color:var(--gold);white-space:nowrap;flex-shrink:0;">View &rarr;</span>
+        </div>
+      `).join('');
+    }
+  }
+  function filterCategory(cat) {
+    document.getElementById('searchInput').value = cat;
+    doSearch(cat);
+  }
+
+  /* ── CART ── */
+  let cart = [];
+  function openCart() {
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartSidebar').classList.add('open');
+  }
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartSidebar').classList.remove('open');
+  }
+  function addToCart(name, price) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1 }); }
+    renderCart();
+    showToast('"' + name + '" added to bag');
+  }
+  function removeFromCart(idx) { cart.splice(idx, 1); renderCart(); }
+  function renderCart() {
+    const wrap = document.getElementById('cart-items-wrap');
+    const footer = document.getElementById('cart-footer');
+    const emptyMsg = document.getElementById('cart-empty-msg');
+    const countEl = document.getElementById('cart-count');
+    const totalEl = document.getElementById('cart-total-price');
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    countEl.textContent = count;
+
+    if (cart.length === 0) {
+      wrap.innerHTML = '';
+      wrap.appendChild(emptyMsg);
+      emptyMsg.style.display = 'block';
+      footer.style.display = 'none';
+      return;
+    }
+
+    emptyMsg.style.display = 'none';
+    footer.style.display = 'block';
+    totalEl.textContent = 'IDR ' + total.toLocaleString();
+
+    const imgs = [
+      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=200&q=60',
+      'https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=200&q=60',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&q=60'
+    ];
+
+    /* rebuild wrap: items first, then footer */
+    wrap.innerHTML = '';
+    cart.forEach((item, idx) => {
+      const prod = products.find(p => p.name === item.name);
+      const imgSrc = prod ? prod.img : imgs[idx % imgs.length];
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <img src="${imgSrc}" alt="${item.name}" />
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <div class="size">Qty: ${item.qty}</div>
+          <div class="price">IDR ${(item.price * item.qty).toLocaleString()}</div>
+        </div>
+        <button class="remove-item" onclick="removeFromCart(${idx})">&times;</button>
+      `;
+      wrap.appendChild(div);
+    });
+    wrap.appendChild(footer);
+  }
+
+  function handleCheckout() {
+    showToast('Redirecting to checkout…');
+    /* Hook up your checkout page here */
+  }
+
+  /* ── AUTH ── */
+  function openAuth(tab) {
+    tab = tab || 'login'; switchTab(tab);
+    document.getElementById('authOverlay').classList.add('open');
+    document.getElementById('authModal').classList.add('open');
+    document.getElementById('auth-success').style.display = 'none';
+  }
+  function closeAuth() {
+    document.getElementById('authOverlay').classList.remove('open');
+    document.getElementById('authModal').classList.remove('open');
+  }
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('form-' + tab).style.display = 'block';
+    document.getElementById('auth-success').style.display = 'none';
+  }
+  function togglePass(id, el) {
+    const input = document.getElementById(id);
+    if (input.type === 'password') { input.type = 'text'; el.textContent = 'Hide'; }
+    else { input.type = 'password'; el.textContent = 'Show'; }
+  }
+  document.getElementById('reg-password').addEventListener('input', function() {
+    const val = this.value; const bar = document.getElementById('pwd-strength');
+    let s = 0;
+    if (val.length >= 8) s++; if (/[A-Z]/.test(val)) s++; if (/[0-9]/.test(val)) s++; if (/[^A-Za-z0-9]/.test(val)) s++;
+    bar.style.setProperty('--strength', val ? (['25%','50%','75%','100%'][s-1] || '10%') : '0%');
+    bar.style.setProperty('--strength-color', val ? (['#e24b4a','#ef9f27','#639922','#1D9E75'][s-1] || '#e24b4a') : 'transparent');
+  });
+
+  function handleLogin() {
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const pass  = document.getElementById('login-password').value;
+    if (!email || !pass) { showToast('Please fill in all fields'); return; }
+
+    /* ── Admin redirect ── */
+    if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+      localStorage.setItem("isAdmin", "true");
+      window.location.href = "../admin/dashboard.html";
+      return;
+    }
+
+    if (!email.includes('@')) { showToast('Please enter a valid email'); return; }
+
+    /* ── Regular user login ── */
+    document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
+    document.getElementById('auth-success').style.display = 'block';
+    document.getElementById('success-msg').textContent = 'Welcome back! You are now signed in.';
+  }
+
+  function handleRegister() {
+    const first = document.getElementById('reg-firstname').value.trim();
+    const last  = document.getElementById('reg-lastname').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const pass  = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm').value;
+    const terms = document.getElementById('reg-terms').checked;
+    if (!first || !last || !email || !phone || !pass || !confirm) { showToast('Please fill in all fields'); return; }
+    if (!email.includes('@')) { showToast('Please enter a valid email'); return; }
+    if (pass.length < 8) { showToast('Password must be at least 8 characters'); return; }
+    if (pass !== confirm) { showToast('Passwords do not match'); return; }
+    if (!terms) { showToast('Please accept the Terms & Conditions'); return; }
+    document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
+    document.getElementById('auth-success').style.display = 'block';
+    document.getElementById('success-msg').textContent = 'Welcome, ' + first + '! Your account has been created.';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = '✦ ' + msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
